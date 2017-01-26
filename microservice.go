@@ -17,3 +17,9 @@ func Port(port string) Param {
 		o.Server.Port = port
 	}
 }
+
+func HostName(hostName string) Param {
+	return func(o *Params) {
+		o.Server.HostName = hostName
+	}
+}
