@@ -12,17 +12,12 @@ func main() {
 		microtoolkit.ServerName("vimeo.rest"),
 		microtoolkit.Port("3035"))
 
-	r := mux.NewRouter()
-
 	Home := new(handler.Carro)
-	Home2 := new(handler.Carro)
+	r := mux.NewRouter()
+	r.HandleFunc("/oi", Home.ServeHTTP)
 
-	r.Handle("/oi", Home)
-	r.HandleFunc("/Ola", Home2.ServeHTTP)
-
-	service.Handler(r)
-	//service.RegistryHandlers()
 	service.Init()
+	service.Handler(r)
 	service.Run()
 
 }
