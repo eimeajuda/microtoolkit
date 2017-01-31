@@ -36,7 +36,6 @@ func (s *Server) Handler(handler http.Handler) {
 	valueField := val.Field(1)
 	typeField := val.Type().Field(1)
 	if typeField.PkgPath != "" && !typeField.Anonymous {
-
 		fmt.Println(typeField.Name)
 		fmt.Println(typeField.Type)
 		valor := reflect.ValueOf(valueField)

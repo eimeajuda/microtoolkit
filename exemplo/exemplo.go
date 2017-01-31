@@ -16,8 +16,9 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/oi", Home.ServeHTTP)
 
-	service.Init()
+	Home.RegisterRouter(service)
 	service.Handler(r)
+	service.Init()
 	service.Run()
 
 }
