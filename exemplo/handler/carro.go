@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/DanielDanteDosSantosViana/microtoolkit"
+	"github.com/DanielDanteDosSantosViana/microtoolkit/registry"
 )
 
 type Carro struct {
@@ -17,11 +18,11 @@ func (h *Carro) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Carro) RegisterRouter(service microtoolkit.Service) error {
-	registry.RegistryRouters(
+	registry.RegistryRouter(
 		registry.Path("/oi"),
 		registry.Method("POST"),
 		registry.Description("Descirpiton"),
-		service)
+		registry.Service(service))
 
 	return nil
 }

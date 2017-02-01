@@ -2,14 +2,13 @@ package registry
 
 type Params struct {
 	Id     string
-	router Router
+	router router
 }
 
-type Router struct {
-	Path        string `json:"path"`
-	UrlSrc      string `json:"urlSrc"`
-	UrlDest     string `json:"urlDest"`
-	Method      string `json:"method"`
-	ReturnType  string `json:"returnType"`
-	Description string `json:"description"`
+func newParams(param ...Param) Params {
+	params := Params{}
+	for _, p := range param {
+		p(&params)
+	}
+	return params
 }

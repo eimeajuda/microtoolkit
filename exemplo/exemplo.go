@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/DanielDanteDosSantosViana/microtoolkit"
-	"github.com/DanielDanteDosSantosViana/microtoolkit/exemplo/handler"
+	"github.com/DanielDanteDosSantosViana/microtoolkit/handler"
 	"github.com/gorilla/mux"
 )
 

@@ -1,9 +1,13 @@
 package microtoolkit
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/DanielDanteDosSantosViana/microtoolkit/registry"
+)
 
 type Service struct {
-	params Params
+	Params Params
 	init   chan bool
 }
 
@@ -13,13 +17,17 @@ func newService(param ...Param) *Service {
 }
 
 func (s *Service) Init() {
-	s.params.Server.Init()
+	s.Params.Server.Init()
 }
 
 func (s *Service) Run() {
-	s.params.Server.Run()
+	s.Params.Server.Run()
 }
 
 func (s *Service) Handler(handler http.Handler) {
-	s.params.Server.Handler(handler)
+	s.Params.Server.Handler(handler)
+}
+
+func (s *Service) AddRouter(router registry.Router) {
+	s.Params.Server.Routers = append(s.params.Server, router)
 }

@@ -3,8 +3,6 @@ package registry
 import (
 	"errors"
 
-	"github.com/DanielDanteDosSantosViana/microtoolkit"
-
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -14,7 +12,16 @@ var (
 )
 
 type RegistryRoute interface {
-	RegisterRouter(microtoolkit.Service) error
+	RegisterRouter(Service) error
+}
+
+type router struct {
+	Path        string `json:"path"`
+	UrlSrc      string `json:"urlSrc"`
+	UrlDest     string `json:"urlDest"`
+	Method      string `json:"method"`
+	ReturnType  string `json:"returnType"`
+	Description string `json:"description"`
 }
 
 type Service struct {
@@ -22,11 +29,15 @@ type Service struct {
 	Name     string        `json:"name"`
 	HostName string        `json:"hostname"`
 	Port     string        `json:"port"`
-	Routers  []Router      `json:"routers"`
+	Routers  []router      `json:"routers"`
 }
 type Param func(*Params)
 
-func Register(service Service) error {
+func RegistryRouter(params ...Param) *Router {
+	return newRouter(params...)
+}
+
+func register(service Service) error {
 	registered, err := isRegistered(service)
 	if err != nil {
 		return err
@@ -36,7 +47,7 @@ func Register(service Service) error {
 	}
 	return nil
 }
-func Update(service Service) error {
+func update(service Service) error {
 	registered, err := isRegistered(service)
 	if err != nil {
 		return err
@@ -48,15 +59,12 @@ func Update(service Service) error {
 	return nil
 }
 
-func Delete(service Service) {
+func delete(service Service) {
 
 }
 
 func isRegistered(service Service) (bool, error) {
 	return true, nil
-}
-
-func update(id string, newValuesService *Service) {
 }
 
 func Id(idRouter string) Param {
@@ -94,5 +102,10 @@ func ReturnType(returnType string) Param {
 func Description(description string) Param {
 	return func(p *Params) {
 		p.router.Description = description
+	}
+}
+func Service(service Service) Param {
+	return func(p *Params) {
+		service.AddRouter(p.params.Router)
 	}
 }
