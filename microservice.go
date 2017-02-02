@@ -1,25 +1,29 @@
 package microtoolkit
 
-type Param func(*Params)
+import "github.com/DanielDanteDosSantosViana/microtoolkit/service"
 
-func NewService(params ...Param) *Service {
-	return newService(params...)
+func RegistryRouter(service *service.Service) *Registry {
+	return NewRegistry(service)
 }
 
-func ServerName(serverName string) Param {
-	return func(o *Params) {
+func NewService(params ...service.Param) *service.Service {
+	return service.NewService(params...)
+}
+
+func ServerName(serverName string) service.Param {
+	return func(o *service.Params) {
 		o.Server.Name = serverName
 	}
 }
 
-func Port(port string) Param {
-	return func(o *Params) {
+func Port(port string) service.Param {
+	return func(o *service.Params) {
 		o.Server.Port = port
 	}
 }
 
-func HostName(hostName string) Param {
-	return func(o *Params) {
+func HostName(hostName string) service.Param {
+	return func(o *service.Params) {
 		o.Server.HostName = hostName
 	}
 }

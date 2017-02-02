@@ -1,4 +1,4 @@
-package microtoolkit
+package service
 
 import (
 	"net/http"
@@ -11,7 +11,7 @@ type Service struct {
 	init   chan bool
 }
 
-func newService(param ...Param) *Service {
+func NewService(param ...Param) *Service {
 	params := newParams(param...)
 	return &Service{params, make(chan bool)}
 }
@@ -28,6 +28,6 @@ func (s *Service) Handler(handler http.Handler) {
 	s.Params.Server.Handler(handler)
 }
 
-func (s *Service) AddRouter(router registry.Router) {
-	s.Params.Server.Routers = append(s.params.Server, router)
+func (s *Service) AddRouter(router *registry.Router) {
+	s.Params.Server.Routers = append(s.Params.Server.Routers, router)
 }

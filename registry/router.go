@@ -5,7 +5,7 @@ type Router struct {
 	init   chan bool
 }
 
-func newRouter(param ...Param) *Router {
+func NewRouter(param ...Param) *Router {
 	params := newParams(param...)
 	return &Router{params, make(chan bool)}
 }
