@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/DanielDanteDosSantosViana/microtoolkit"
-	"github.com/DanielDanteDosSantosViana/microtoolkit/handler"
+	"github.com/DanielDanteDosSantosViana/microtoolkit/exemplo/handler"
 	"github.com/gorilla/mux"
 )
 
@@ -12,13 +12,12 @@ func main() {
 		microtoolkit.ServerName("vimeo.rest"),
 		microtoolkit.Port("3035"))
 
-	Home := new(handler.Carro)
+	carro := new(handler.Carro)
 	r := mux.NewRouter()
-	r.HandleFunc("/oi", Home.ServeHTTP)
+	r.HandleFunc("/oi", carro.ServeHTTP)
 
-	Home.RegisterRouter(service)
-	service.Handler(r)
+	carro.RegisterRouter(service)
 	service.Init()
+	service.Handler(r)
 	service.Run()
-
 }

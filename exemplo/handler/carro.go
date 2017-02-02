@@ -1,10 +1,11 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/DanielDanteDosSantosViana/microtoolkit"
-	"github.com/DanielDanteDosSantosViana/microtoolkit/registry"
+	"github.com/DanielDanteDosSantosViana/microtoolkit/service"
 )
 
 type Carro struct {
@@ -13,16 +14,16 @@ type Carro struct {
 }
 
 func (h *Carro) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-
+	log.Println("Olá")
 	return
 }
 
-func (h *Carro) RegisterRouter(service microtoolkit.Service) error {
-	registry.RegistryRouter(
-		registry.Path("/oi"),
-		registry.Method("POST"),
-		registry.Description("Descirpiton"),
-		registry.Service(service))
+func (h *Carro) RegisterRouter(service *service.Service) error {
+	register := microtoolkit.NewRegistry(service)
+	register.RegistryRouter(
+		register.Method("POST"),
+		register.Path("/oi"),
+		register.UrlDest("urlDest"))
 
 	return nil
 }
