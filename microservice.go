@@ -2,10 +2,6 @@ package microtoolkit
 
 import "github.com/DanielDanteDosSantosViana/microtoolkit/service"
 
-func RegistryRouter(service *service.Service) *Registry {
-	return NewRegistry(service)
-}
-
 func NewService(params ...service.Param) *service.Service {
 	return service.NewService(params...)
 }

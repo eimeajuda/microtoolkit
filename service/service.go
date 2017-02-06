@@ -16,8 +16,8 @@ func NewService(param ...Param) *Service {
 	return &Service{params, make(chan bool)}
 }
 
-func (s *Service) Init() {
-	s.Params.Server.Init()
+func (s *Service) Init() error {
+	return s.Params.Server.Init()
 }
 
 func (s *Service) Run() {
@@ -28,6 +28,6 @@ func (s *Service) Handler(handler http.Handler) {
 	s.Params.Server.Handler(handler)
 }
 
-func (s *Service) AddRouter(router *registry.Router) {
+func (s *Service) AddRouter(router registry.Router) {
 	s.Params.Server.Routers = append(s.Params.Server.Routers, router)
 }

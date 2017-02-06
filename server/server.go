@@ -11,19 +11,36 @@ type Server struct {
 	Name     string
 	Port     string
 	HostName string
-	Routers  []*registry.Router
+	Routers  []registry.Router
 	server   *http.Server
 }
 
 func (s *Server) Init() error {
-	s.server = &http.Server{
+	s.server = createConfigServer(s)
+	exist, err := verifyExistinRouters(s)
+	if err != nil {
+		return err
+	}
+	if exist {
+		registry.Register(s.Routers, s.Name)
+	}
+
+	return nil
+}
+func verifyExistinRouters(s *Server) (bool, error) {
+
+	if len(s.Routers) > 0 {
+		return true, nil
+	}
+	return false, nil
+}
+func createConfigServer(s *Server) *http.Server {
+	return &http.Server{
 		Addr:           ":" + s.Port,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
-
-	return nil
 }
 
 func (s *Server) Run() {
