@@ -1,4 +1,4 @@
-package discovery
+package router
 
 type Router struct {
 	Params Params

@@ -1,4 +1,4 @@
-package discovery
+package module
 
 type Module struct {
 	Params ParamsM

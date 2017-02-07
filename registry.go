@@ -2,9 +2,8 @@ package microtoolkit
 
 import (
 	"errors"
-	"log"
 
-	"github.com/DanielDanteDosSantosViana/microtoolkit/registry"
+	"github.com/DanielDanteDosSantosViana/microtoolkit/router"
 	"github.com/DanielDanteDosSantosViana/microtoolkit/service"
 )
 
@@ -20,46 +19,45 @@ type Registry struct {
 func NewRegistry(service *service.Service) *Registry {
 	return &Registry{service}
 }
-func (reg *Registry) RegistryRouter(params ...registry.Param) {
-	router := registry.NewRouter(params...)
+func (reg *Registry) RegistryRouter(params ...router.Param) {
+	router := router.NewRouter(params...)
 	reg.service.AddRouter(router)
-	log.Println(router)
 }
 
-func (reg *Registry) Id(idRouter string) registry.Param {
-	return func(p *registry.Params) {
+func (reg *Registry) Id(idRouter string) router.Param {
+	return func(p *router.Params) {
 		p.Id = idRouter
 	}
 }
 
-func (reg *Registry) Method(method string) registry.Param {
-	return func(p *registry.Params) {
+func (reg *Registry) Method(method string) router.Param {
+	return func(p *router.Params) {
 		p.Router.Method = method
 	}
 }
 
-func (reg *Registry) Path(path string) registry.Param {
-	return func(p *registry.Params) {
+func (reg *Registry) Path(path string) router.Param {
+	return func(p *router.Params) {
 		p.Router.Path = path
 	}
 }
-func (reg *Registry) UrlSrc(urlSrc string) registry.Param {
-	return func(p *registry.Params) {
+func (reg *Registry) UrlSrc(urlSrc string) router.Param {
+	return func(p *router.Params) {
 		p.Router.UrlSrc = urlSrc
 	}
 }
-func (reg *Registry) UrlDest(urlDest string) registry.Param {
-	return func(p *registry.Params) {
+func (reg *Registry) UrlDest(urlDest string) router.Param {
+	return func(p *router.Params) {
 		p.Router.UrlDest = urlDest
 	}
 }
-func ReturnType(returnType string) registry.Param {
-	return func(p *registry.Params) {
+func ReturnType(returnType string) router.Param {
+	return func(p *router.Params) {
 		p.Router.ReturnType = returnType
 	}
 }
-func Description(description string) registry.Param {
-	return func(p *registry.Params) {
+func Description(description string) router.Param {
+	return func(p *router.Params) {
 		p.Router.Description = description
 	}
 }

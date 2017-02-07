@@ -1,15 +1,17 @@
 package registry
 
 import (
-	"log"
 	"sync"
 
 	"github.com/DanielDanteDosSantosViana/microtoolkit/discovery"
+	"github.com/DanielDanteDosSantosViana/microtoolkit/module"
+	"github.com/DanielDanteDosSantosViana/microtoolkit/router"
+	"github.com/fatih/color"
 )
 
-func Register(params ...discovery.ParamM) {
-	module := discovery.NewModule(params...)
-	results := make(chan *discovery.Router)
+func Register(params ...module.ParamM) {
+	module := module.NewModule(params...)
+	results := make(chan *router.Router)
 	routes := module.Params.Module.Routers
 
 	var waitGroup sync.WaitGroup
@@ -18,26 +20,30 @@ func Register(params ...discovery.ParamM) {
 	var nameModule = module.Params.Module.Name
 
 	for _, route := range routes {
-		go func(route discovery.Router) {
+		go func(route router.Router) {
 			_, err := discovery.FindModule(nameModule)
 			if err != nil {
-				log.Println("Router : " + route.Params.Router.Path + " to Module " + " - Error (" + err.Error() + " )")
-				continue
-			}
-			result,err = discovery.FindRouter(nameModule, route.Params.Router.Path)
-			if err != nil {
-				log.Println("Router : " + route.Params.Router.Path + " to Module " + " - Error (" + err.Error() + " )")
-				continue
+				color.Red("Router : %s to module: %s - Error ('%s') ", route.Params.Router.Path, nameModule, err.Error())
 			}
 
-			log.Println("Router : " + route.Params.Router.Path + " to Module " + " - OK ( EXISTIS )")
-				} else {
-					result = discovery.CreateRouter(nameModule, route)
-					if result.Created {
-						log.Println("Router : " + route.Params.Router.Path + " to Module " + " - OK (NEW )")
-					}
+			/*
+				_, err = discovery.FindRouter(nameModule, route.Params.Router.Path)
+				if err != nil {
+					color.Red("Router : %s to module: %s - Error ('%s') ", route.Params.Router.Path, nameModule, err.Error())
+					return
 				}
-			}
+
+				log.Println("Router : " + route.Params.Router.Path + " to Module " + " - OK ( EXISTIS )")
+				result, err := discovery.CreateRouter(nameModule, route)
+				if err != nil {
+					color.Red("Router : %s to module: %s - Error ('%s') ", route.Params.Router.Path, nameModule, err.Error())
+				}
+
+				if result.StatusCode != 200 {
+					color.Red("Error to create Router : %s MSG: %s", route.Params.Router.Path, result.MSG)
+				}*/
+			color.Blue("Router : %s to module: %s - OK (new)", route.Params.Router.Path)
+
 			waitGroup.Done()
 		}(route)
 	}
@@ -47,4 +53,16 @@ func Register(params ...discovery.ParamM) {
 		close(results)
 	}()
 
+}
+
+func NameModule(nameModule string) module.ParamM {
+	return func(o *module.ParamsM) {
+		o.Module.Name = nameModule
+	}
+}
+
+func Routers(routers []router.Router) module.ParamM {
+	return func(o *module.ParamsM) {
+		o.Module.Routers = routers
+	}
 }

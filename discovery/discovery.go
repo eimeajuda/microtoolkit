@@ -3,6 +3,9 @@ package discovery
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/DanielDanteDosSantosViana/microtoolkit/module"
+	"github.com/DanielDanteDosSantosViana/microtoolkit/router"
 )
 
 type Result struct {
@@ -39,8 +42,8 @@ func FindRouter(nameModule string, pathRouter string) (Result, error) {
 
 }
 
-func CreateModule(module Module) (Result, error) {
-	resp, err := http.Get("")
+func CreateModule(module module.Module) (Result, error) {
+	resp, err := http.Get("http://google.com.br")
 	if err != nil {
 		return Result{}, err
 	}
@@ -54,7 +57,7 @@ func CreateModule(module Module) (Result, error) {
 
 }
 
-func CreateRouter(nameModule string, router Router) (Result, error) {
+func CreateRouter(nameModule string, router router.Router) (Result, error) {
 	resp, err := http.Get("")
 	if err != nil {
 		return Result{}, err

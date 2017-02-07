@@ -3,7 +3,7 @@ package service
 import (
 	"net/http"
 
-	"github.com/DanielDanteDosSantosViana/microtoolkit/registry"
+	"github.com/DanielDanteDosSantosViana/microtoolkit/router"
 )
 
 type Service struct {
@@ -28,6 +28,6 @@ func (s *Service) Handler(handler http.Handler) {
 	s.Params.Server.Handler(handler)
 }
 
-func (s *Service) AddRouter(router registry.Router) {
+func (s *Service) AddRouter(router router.Router) {
 	s.Params.Server.Routers = append(s.Params.Server.Routers, router)
 }

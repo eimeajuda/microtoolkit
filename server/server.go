@@ -5,13 +5,14 @@ import (
 	"time"
 
 	"github.com/DanielDanteDosSantosViana/microtoolkit/registry"
+	"github.com/DanielDanteDosSantosViana/microtoolkit/router"
 )
 
 type Server struct {
 	Name     string
 	Port     string
 	HostName string
-	Routers  []registry.Router
+	Routers  []router.Router
 	server   *http.Server
 }
 
@@ -22,13 +23,12 @@ func (s *Server) Init() error {
 		return err
 	}
 	if exist {
-		registry.Register(s.Routers, s.Name)
+		registry.Register(registry.NameModule(s.Name), registry.Routers(s.Routers))
 	}
 
 	return nil
 }
 func verifyExistinRouters(s *Server) (bool, error) {
-
 	if len(s.Routers) > 0 {
 		return true, nil
 	}
