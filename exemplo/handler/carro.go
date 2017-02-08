@@ -19,11 +19,12 @@ func (h *Carro) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Carro) RegisterRouter(service *service.Service) error {
+
 	register := microtoolkit.NewRegistry(service)
 	register.RegistryRouter(
-		register.Method("POST"),
+		register.Method("GET"),
 		register.Path("/oi"),
-		register.UrlDest("urlDest"))
+		register.UrlDest("http://www.google.com.br"))
 
 	return nil
 }

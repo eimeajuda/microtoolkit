@@ -8,10 +8,10 @@ type ParamsM struct {
 }
 
 type module struct {
-	Name     string          `json:"name"`
-	HostName string          `json:"hostname"`
-	Port     string          `json:"port"`
-	Routers  []router.Router `json:"routers"`
+	Name     string           `json:"name"`
+	HostName string           `json:"hostname"`
+	Port     string           `json:"port"`
+	Routers  []router.RouterP `json:"routers"`
 }
 type ParamM func(*ParamsM)
 

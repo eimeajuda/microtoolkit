@@ -2,10 +2,10 @@ package router
 
 type Params struct {
 	Id     string
-	Router router
+	Router RouterP
 }
 
-type router struct {
+type RouterP struct {
 	Path        string `json:"path"`
 	UrlSrc      string `json:"urlSrc"`
 	UrlDest     string `json:"urlDest"`

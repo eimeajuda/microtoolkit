@@ -10,7 +10,8 @@ func main() {
 
 	service := microtoolkit.NewService(
 		microtoolkit.ServerName("vimeo.rest"),
-		microtoolkit.Port("3035"))
+		microtoolkit.Port("3035"),
+		microtoolkit.HostName("localhost"))
 
 	carro := new(handler.Carro)
 	r := mux.NewRouter()

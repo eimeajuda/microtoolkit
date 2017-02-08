@@ -1,6 +1,10 @@
 package microtoolkit
 
-import "github.com/DanielDanteDosSantosViana/microtoolkit/service"
+import (
+	"log"
+
+	"github.com/DanielDanteDosSantosViana/microtoolkit/service"
+)
 
 func NewService(params ...service.Param) *service.Service {
 	return service.NewService(params...)
@@ -8,18 +12,21 @@ func NewService(params ...service.Param) *service.Service {
 
 func ServerName(serverName string) service.Param {
 	return func(o *service.Params) {
-		o.Server.Name = serverName
+		log.Print(serverName)
+		o.Server.Module.Params.Module.Name = serverName
 	}
 }
 
 func Port(port string) service.Param {
 	return func(o *service.Params) {
-		o.Server.Port = port
+		log.Print(port)
+		o.Server.Module.Params.Module.Port = port
 	}
 }
 
 func HostName(hostName string) service.Param {
 	return func(o *service.Params) {
-		o.Server.HostName = hostName
+		log.Print(hostName)
+		o.Server.Module.Params.Module.HostName = hostName
 	}
 }

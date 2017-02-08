@@ -1,42 +1,47 @@
 package server
 
 import (
+	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"time"
 
+	"github.com/DanielDanteDosSantosViana/microtoolkit/module"
 	"github.com/DanielDanteDosSantosViana/microtoolkit/registry"
-	"github.com/DanielDanteDosSantosViana/microtoolkit/router"
+	"github.com/fatih/color"
 )
 
+var hostDiscovery = os.Getenv("MICRO_DISCOVERY")
+
 type Server struct {
-	Name     string
-	Port     string
-	HostName string
-	Routers  []router.Router
-	server   *http.Server
+	Module module.Module
+	server *http.Server
 }
 
-func (s *Server) Init() error {
-	s.server = createConfigServer(s)
-	exist, err := verifyExistinRouters(s)
+func (s *Server) Init() {
+	err := verifyVariableEnv()
 	if err != nil {
-		return err
+		log.Panic(err)
 	}
+	s.server = createConfigServer(s)
+	exist := verifyExistinRouters(s)
 	if exist {
-		registry.Register(registry.NameModule(s.Name), registry.Routers(s.Routers))
+		registry.Register(s.Module)
+	} else {
+		color.Blue("Could not find route to authenticate...")
 	}
 
-	return nil
 }
-func verifyExistinRouters(s *Server) (bool, error) {
-	if len(s.Routers) > 0 {
-		return true, nil
+func verifyExistinRouters(s *Server) bool {
+	if len(s.Module.Params.Module.Routers) > 0 {
+		return true
 	}
-	return false, nil
+	return false
 }
 func createConfigServer(s *Server) *http.Server {
 	return &http.Server{
-		Addr:           ":" + s.Port,
+		Addr:           ":" + s.Module.Params.Module.Port,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
@@ -45,6 +50,7 @@ func createConfigServer(s *Server) *http.Server {
 
 func (s *Server) Run() {
 	s.server.ListenAndServe()
+
 }
 
 func (s *Server) Handler(handler http.Handler) {
@@ -53,4 +59,11 @@ func (s *Server) Handler(handler http.Handler) {
 
 func (s *Server) Stop() {
 
+}
+
+func verifyVariableEnv() error {
+	if hostDiscovery == "" {
+		return fmt.Errorf("Not Found 'MICRO_DISCOVERY' variable")
+	}
+	return nil
 }

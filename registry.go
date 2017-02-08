@@ -21,7 +21,7 @@ func NewRegistry(service *service.Service) *Registry {
 }
 func (reg *Registry) RegistryRouter(params ...router.Param) {
 	router := router.NewRouter(params...)
-	reg.service.AddRouter(router)
+	reg.service.AddRouter(router.Params.Router)
 }
 
 func (reg *Registry) Id(idRouter string) router.Param {
