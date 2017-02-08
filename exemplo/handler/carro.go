@@ -26,5 +26,15 @@ func (h *Carro) RegisterRouter(service *service.Service) error {
 		register.Path("/oi"),
 		register.UrlDest("http://www.google.com.br"))
 
+	register.RegistryRouter(
+		register.Method("POST"),
+		register.Path("/teste"),
+		register.UrlDest("http://www.google.com.br"))
+
+		register.RegistryRouter(
+		register.Method("GET"),
+		register.Path("/New"),
+		register.UrlDest("http://www.google.com.br"))
+
 	return nil
 }

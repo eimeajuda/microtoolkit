@@ -20,36 +20,32 @@ func Register(module module.Module) {
 
 	for _, route := range routes {
 		go func(route router.RouterP) {
-			_, err := discovery.FindModule(nameModule)
+			err := discovery.FindModule(nameModule)
 			if err != nil {
 				color.Red("Module %s - Error ('%s') ", nameModule, err.Error())
-				_, err = discovery.CreateModule(module)
+				err = discovery.CreateModule(module)
 				if err != nil {
 					color.Red("Module %s - Create - Error (%s) ", nameModule, err)
+					waitGroup.Done()
 					return
 				}
 				color.Blue("Module %s - Create - OK (new) ", nameModule)
 			}
 
-			_, err = discovery.FindRouter(nameModule, route.Path)
+			err = discovery.FindRouter(nameModule, route.Path)
 			if err != nil {
 				color.Red("Router : %s to module: %s - Error ('%s') ", route.Path, nameModule, err.Error())
+				err = discovery.CreateRouter(nameModule,route)
+				if err!=nil{
+					color.Red("Route %s - Create - Error (%s) ", route.Path, err)
+					waitGroup.Done()
+					return
+				}
+				color.Blue("Route %s - Create - OK (new) ", route.Path)
+				waitGroup.Done()
 				return
 			}
-			/*
 
-				log.Println("Router : " + route.Params.Router.Path + " to Module " + " - OK ( EXISTIS )")
-				result, err := discovery.CreateRouter(nameModule, route)
-				if err != nil {
-					color.Red("Router : %s to module: %s - Error ('%s') ", route.Params.Router.Path, nameModule, err.Error())
-				}
-
-				if result.StatusCode != 200 {
-					color.Red("Error to create Router : %s MSG: %s", route.Params.Router.Path, result.MSG)
-				}*/
-			//			color.Blue("Router : %s to module: %s - OK (new)", route.Params.Router.Path, nameModule)
-
-			waitGroup.Done()
 		}(route)
 	}
 

@@ -1,9 +1,8 @@
 package microtoolkit
 
 import (
-	"log"
-
 	"github.com/DanielDanteDosSantosViana/microtoolkit/service"
+	"github.com/fatih/color"
 )
 
 func NewService(params ...service.Param) *service.Service {
@@ -12,21 +11,21 @@ func NewService(params ...service.Param) *service.Service {
 
 func ServerName(serverName string) service.Param {
 	return func(o *service.Params) {
-		log.Print(serverName)
+		color.Yellow("Server Name : '%s' \n", serverName)
 		o.Server.Module.Params.Module.Name = serverName
 	}
 }
 
 func Port(port string) service.Param {
 	return func(o *service.Params) {
-		log.Print(port)
+		color.Yellow("Port : '%s' \n", port)
 		o.Server.Module.Params.Module.Port = port
 	}
 }
 
 func HostName(hostName string) service.Param {
 	return func(o *service.Params) {
-		log.Print(hostName)
+		color.Yellow("Host: '%s' \n", hostName)
 		o.Server.Module.Params.Module.HostName = hostName
 	}
 }
