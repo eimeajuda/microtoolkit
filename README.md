@@ -17,7 +17,6 @@ um Registro de Serviço, que conhece os locais de todas as instâncias de servi�
 
 ## Inicio
 
-### Escrevendo o primeiro serviço
 
 
 ### Intalando Microtoolkit
@@ -32,6 +31,57 @@ export MICRO_DISCOVERY=http://localhost:3032
 instalando API
 ```shell
 go get gitlab.com/digamecomo/microtoolkit
+```
+
+
+### Escrevendo o primeiro serviço
+
+```go
+
+	service := microtoolkit.NewService(
+		microtoolkit.ServerName("vimeo.rest"),
+		microtoolkit.Port("3035"),
+		microtoolkit.HostName("localhost"))
+	
+	service.Init()
+	service.Run()
+
+```
+
+
+### adicionando Handlers no serviço (exemplo utilizando gorillaMux)
+```go
+
+	service := microtoolkit.NewService(
+		microtoolkit.ServerName("vimeo.rest"),
+		microtoolkit.Port("3035"),
+		microtoolkit.HostName("localhost"))
+
+	carro := new(handler.Carro)
+	r := mux.NewRouter()
+	r.HandleFunc("/oi", carro.ServeHTTP)
+	
+	service.Init()
+	service.Handler(r)
+	service.Run()
+```
+
+### Registrando Rotas
+```go
+
+	register := microtoolkit.NewRegistry(service)
+	register.RegistryRouter(
+		register.Method("GET"),
+		register.Path("/oi"),
+		register.UrlDest("http://www.google.com.br"))
+
+
+```
+### Exemplo encontrado na API(É necessário que o ServiceRegistry esteja com serviço rodando, na mesma porta e ip referenciados na váriavel de ambiente)
+
+```shell
+cd /exemplo/
+go run exemplo.go
 ```
 
 
