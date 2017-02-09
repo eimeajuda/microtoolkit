@@ -9,9 +9,18 @@ import (
 	"github.com/fatih/color"
 )
 
+type Result struct {
+	Color *color.Color
+	MSG   string
+}
+
 func Register(module module.Module) {
-	results := make(chan *router.Router)
+	results := make(chan *Result)
 	routes := module.Params.Module.Routers
+	//colors
+	red := color.New(color.FgRed)
+	blue := color.New(color.FgBlue)
+	green := color.New(color.FgGreen)
 
 	var waitGroup sync.WaitGroup
 	waitGroup.Add(len(routes))
@@ -22,30 +31,42 @@ func Register(module module.Module) {
 		go func(route router.RouterP) {
 			err := discovery.FindModule(nameModule)
 			if err != nil {
-				color.Red("Module %s - Error ('%s') ", nameModule, err.Error())
+
+				result := &Result{red, "Module " + nameModule + " - Error ('" + err.Error() + "') "}
+				results <- result
 				err = discovery.CreateModule(module)
 				if err != nil {
-					color.Red("Module %s - Create - Error (%s) ", nameModule, err)
+					result = &Result{red, "Module " + nameModule + " - Create - Error (" + err.Error() + ")"}
+					results <- result
 					waitGroup.Done()
 					return
 				}
-				color.Blue("Module %s - Create - OK (new) ", nameModule)
+				result = &Result{blue, "Module " + nameModule + " -  Create - OK (new)"}
+				results <- result
+
 			}
 
 			err = discovery.FindRouter(nameModule, route.Path)
 			if err != nil {
-				color.Red("Router : %s to module: %s - Error ('%s') ", route.Path, nameModule, err.Error())
-				err = discovery.CreateRouter(nameModule,route)
-				if err!=nil{
-					color.Red("Route %s - Create - Error (%s) ", route.Path, err)
+				result := &Result{red, "Router : " + route.Path + " to module: " + nameModule + " - Error ('" + err.Error() + "') "}
+				results <- result
+				err = discovery.CreateRouter(nameModule, route)
+				if err != nil {
+					result = &Result{red, "Route " + route.Path + " - Create - Error (" + err.Error() + ") "}
+					results <- result
 					waitGroup.Done()
 					return
 				}
-				color.Blue("Route %s - Create - OK (new) ", route.Path)
+				result = &Result{blue, "Route " + route.Path + " - Create - OK (new)"}
+				results <- result
 				waitGroup.Done()
 				return
 			}
 
+			result := &Result{green, "Authenticated '" + route.Path + "' route in module '" + nameModule + "' - (OK)"}
+			results <- result
+			//color.Green("Authenticated '" + route.Path + "' route in module '" + nameModule + "' - (OK) \n")
+			waitGroup.Done()
 		}(route)
 	}
 
@@ -54,4 +75,11 @@ func Register(module module.Module) {
 		close(results)
 	}()
 
+	log(results)
+}
+
+func log(results chan *Result) {
+	for result := range results {
+		result.Color.Println(result.MSG)
+	}
 }

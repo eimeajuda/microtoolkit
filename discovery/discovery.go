@@ -11,16 +11,10 @@ import (
 	"github.com/DanielDanteDosSantosViana/microtoolkit/router"
 )
 
-type Result struct {
-	StatusCode int
-	MSG        string
-}
-
 type routeSend struct {
-	NameModule string `json:"nameModule"`
-	Router router.RouterP `json:"router"`
+	NameModule string         `json:"nameModule"`
+	Router     router.RouterP `json:"router"`
 }
-
 
 var hostDiscovery = os.Getenv("MICRO_DISCOVERY")
 
@@ -74,7 +68,7 @@ func CreateModule(moduleP module.Module) error {
 }
 
 func CreateRouter(nameModule string, router router.RouterP) error {
-	s:= routeSend{nameModule,router}
+	s := routeSend{nameModule, router}
 	routeJ, err := json.Marshal(s)
 	if err != nil {
 		return err

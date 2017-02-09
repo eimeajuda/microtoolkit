@@ -30,14 +30,16 @@ func (s *Server) Init() {
 		registry.Register(s.Module)
 	} else {
 		color.Blue("Could not find route to authenticate...")
-		return 
+		return
 	}
 
-	routes := s.Module.Params.Module.Routers
-	for _, route := range routes {
-		color.Green("Authenticated '%s' route in module '%s' - (OK) \n", route.Path,s.Module.Params.Module.Name)
-	}	
+	/*
+		routes := s.Module.Params.Module.Routers
+				for _, route := range routes {
+					color.Green("Authenticated '%s' route in module '%s' - (OK) \n", route.Path,s.Module.Params.Module.Name)
+				}
 
+	*/
 }
 func verifyExistinRouters(s *Server) bool {
 	if len(s.Module.Params.Module.Routers) > 0 {
@@ -73,5 +75,3 @@ func verifyVariableEnv() error {
 	}
 	return nil
 }
-
-
