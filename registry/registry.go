@@ -29,7 +29,7 @@ func Register(module module.Module) {
 
 	for _, route := range routes {
 		go func(route router.RouterP) {
-			err := discovery.FindModule(nameModule)
+			err, _ := discovery.FindModule(nameModule)
 			if err != nil {
 
 				result := &Result{red, "Module " + nameModule + " - Error ('" + err.Error() + "') "}
@@ -46,7 +46,7 @@ func Register(module module.Module) {
 
 			}
 
-			err = discovery.FindRouter(nameModule, route.Path)
+			err, _ = discovery.FindRouter(nameModule, route.Path)
 			if err != nil {
 				result := &Result{red, "Router : " + route.Path + " to module: " + nameModule + " - Error ('" + err.Error() + "') "}
 				results <- result
